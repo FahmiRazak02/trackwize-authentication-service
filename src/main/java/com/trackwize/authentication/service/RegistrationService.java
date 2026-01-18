@@ -35,6 +35,7 @@ public class RegistrationService {
         user.setStatus(DBConst.STATUS_PENDING);
 
         userService.create(user);
+        notificationService.sendAccountIsCreatedEmail(user.getEmail(), user.getName(), trackingId);
 
         handleAccountVerification(user, reqDTO, trackingId);
     }
@@ -46,10 +47,10 @@ public class RegistrationService {
     ) throws JsonProcessingException {
         String token = tokenService.generateEmailVerificationToken(reqDTO.getEmail());
 
-        notificationService.sendAccountVerificationEmail(user.getEmail(), user.getName(), trackingId, token);
+        notificationService.sendAccountIsVerifiedEmail(user.getEmail(), user.getName(), trackingId, token);
     }
 
-    public void verifyAccount(String token, String trackingId) {
+    public void verifyAccount(String token, String trackingId) throws JsonProcessingException {
         String email = tokenService.getRedisValueByToken(token);
 
         if (StringUtils.isBlank(email)) {
@@ -62,6 +63,6 @@ public class RegistrationService {
 
         userService.activateUserAccount(email);
 
-        notificationService.sendAccountCreatedEmail(email, trackingId);
+        notificationService.sendAccountIsActivateEmail(email, trackingId);
     }
 }
