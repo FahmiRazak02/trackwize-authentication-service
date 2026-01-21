@@ -28,7 +28,7 @@ public class UserRegistrationReqDTO {
 
     @NotBlank(message = "contact no is required")
     @Pattern(regexp = CommonConst.CONTACT_NO_REGEX, message = "contact no must be valid")
-    private String contactNo;
+    private String contactNumber;
 
     @NotBlank(message = "name is required")
     @Size(max = 255, message = "email must not exceed 255 characters")
