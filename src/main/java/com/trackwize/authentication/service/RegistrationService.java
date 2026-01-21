@@ -32,7 +32,9 @@ public class RegistrationService {
 
         User user = userMapStruct.toEntity(reqDTO);
         user.setPassword(encryptedPassword);
-        user.setStatus(DBConst.STATUS_PENDING);
+        user.setStatus(DBConst.STATUS_PENDING_CREATE);
+        user.setCreatedBy(DBConst.USER_ID_SYSTEM);
+        user.setUpdatedBy(DBConst.USER_ID_SYSTEM);
 
         userService.create(user);
         notificationService.sendAccountIsCreatedEmail(user.getEmail(), user.getName(), trackingId);

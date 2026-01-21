@@ -33,7 +33,7 @@ public class RegistrationController {
     @PostMapping("/verify-account")
     public ResponseUtil verifyUserAccount(
             @ModelAttribute("trackingId") String trackingId,
-            @PathVariable String token
+            @RequestParam String token
     ) throws JsonProcessingException {
         ResponseUtil responseUtil = ResponseUtil.success();
 

@@ -10,7 +10,7 @@ public class UserProvider {
         return new SQL()
                 .SELECT("*")
                 .FROM(DBConst.USER_TABLE)
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -19,7 +19,7 @@ public class UserProvider {
                 .SELECT("*")
                 .FROM(DBConst.USER_TABLE)
                 .WHERE("email = #{email}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -28,7 +28,7 @@ public class UserProvider {
                 .SELECT("*")
                 .FROM(DBConst.USER_TABLE)
                 .WHERE("user_id = #{userId}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -37,7 +37,7 @@ public class UserProvider {
                 .UPDATE(DBConst.USER_TABLE)
                 .SET("password = #{password}")
                 .WHERE("user_id = #{userId}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 

@@ -11,7 +11,7 @@ CREATE TABLE users (
     created_by bigint NOT NULL DEFAULT '0',
     created_date timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     updated_by bigint DEFAULT NULL,
-    updated_date timestamp NULL DEFAULT CURRENT_TIMESTAMP
+    updated_date timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
 INSERT INTO users (email, password, contact_number, name, status, created_by)
@@ -28,6 +28,51 @@ CREATE TABLE tokens (
     created_by bigint NOT NULL DEFAULT '0',
     created_date timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     updated_by bigint DEFAULT NULL,
-    updated_date timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_date timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE expenses (
+    expense_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    expense_date DATE NOT NULL,
+    created_by BIGINT NOT NULL DEFAULT 0,
+    created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by BIGINT DEFAULT NULL,
+    updated_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE budgets (
+    budget_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL,
+    total_budget DECIMAL(10,2) NOT NULL,
+    alert_sent BOOLEAN DEFAULT FALSE,
+    created_by BIGINT NOT NULL DEFAULT 0,
+    created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by BIGINT DEFAULT NULL,
+    updated_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE recurring_expenses (
+    recurring_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    start_date DATE NOT NULL,
+    frequency VARCHAR(20) NOT NULL DEFAULT 'MONTHLY',
+    active BOOLEAN DEFAULT TRUE,
+    last_generated_at DATE DEFAULT NULL,
+    created_by BIGINT NOT NULL DEFAULT 0,
+    created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by BIGINT DEFAULT NULL,
+    updated_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

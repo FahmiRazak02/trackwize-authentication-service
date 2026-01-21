@@ -10,7 +10,7 @@ public class TokenProvider {
         return new SQL()
                 .FROM(DBConst.TOKEN_TABLE)
                 .SELECT("*")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -19,7 +19,7 @@ public class TokenProvider {
                 .SELECT("COUNT(1)")
                 .FROM(DBConst.TOKEN_TABLE)
                 .WHERE("user_id = #{userId}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -49,7 +49,7 @@ public class TokenProvider {
                 .SELECT("*")
                 .FROM(DBConst.TOKEN_TABLE)
                 .WHERE("user_id = #{userId}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
@@ -58,7 +58,7 @@ public class TokenProvider {
                 .SELECT("*")
                 .FROM(DBConst.TOKEN_TABLE)
                 .WHERE("refresh_token = #{refreshToken}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE)
+                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
                 .toString();
     }
 
