@@ -30,6 +30,15 @@ public class RegistrationService {
     ) throws JsonProcessingException {
         String encryptedPassword = PasswordUtil.encryptPassword(reqDTO.getPassword());
 
+        boolean emailExists  = userService.isEmailExists(reqDTO.getEmail());
+        if (emailExists) {
+            log.warn("[{}] due to email already exist in database: [email] [{}]", ErrorConst.TOKEN_EXPIRED_CODE, reqDTO.getEmail());
+            throw new TrackWizeException(
+                    ErrorConst.CREATE_USER_FAILED_CODE,
+                    reqDTO.getEmail() + " is already in used"
+            );
+        }
+
         User user = userMapStruct.toEntity(reqDTO);
         user.setPassword(encryptedPassword);
         user.setStatus(DBConst.STATUS_PENDING_CREATE);

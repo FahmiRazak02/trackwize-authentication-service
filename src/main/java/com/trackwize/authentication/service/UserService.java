@@ -7,6 +7,8 @@ import com.trackwize.authentication.model.dto.AuthenticationReqDTO;
 import com.trackwize.authentication.model.entity.User;
 import com.trackwize.common.exception.TrackWizeException;
 import com.trackwize.common.util.PasswordUtil;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -81,5 +83,9 @@ public class UserService {
             );
         }
 
+    }
+
+    public boolean isEmailExists(String email) {
+        return userMapper.existsByEmail(email);
     }
 }

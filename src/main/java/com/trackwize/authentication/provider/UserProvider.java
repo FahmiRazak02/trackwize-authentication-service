@@ -37,7 +37,7 @@ public class UserProvider {
                 .UPDATE(DBConst.USER_TABLE)
                 .SET("password = #{password}")
                 .WHERE("user_id = #{userId}")
-                .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
+                .WHERE("status <> " + DBConst.STATUS_INACTIVE_QUERY)
                 .toString();
     }
 
@@ -59,6 +59,15 @@ public class UserProvider {
                 .UPDATE(DBConst.USER_TABLE)
                 .SET("record_status = #{status}")
                 .WHERE("email = #{email}")
+                .toString();
+    }
+
+    public String existsByEmail(String email) {
+        return new SQL()
+                .SELECT("CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END")
+                .FROM(DBConst.USER_TABLE)
+                .WHERE("email = #{email}")
+                .WHERE("status <> " + DBConst.STATUS_INACTIVE_QUERY)
                 .toString();
     }
 }

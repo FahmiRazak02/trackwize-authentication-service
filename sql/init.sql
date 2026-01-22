@@ -16,8 +16,8 @@ CREATE TABLE users (
 
 INSERT INTO users (email, password, contact_number, name, status, created_by)
 VALUES
-('fahmirazak0201@gmail.com', '$2a$12$Hb/G4rOnWl15Q1opGT3i8eszCWOT4DGnyOOw4fApM6uYuHYfmFbia', '0145000973', 'Fahmi Razak', 'ACTIVE', 0),
-('abukasim93@gmail.com', '$2a$12$Hb/G4rOnWl15Q1opGT3i8eszCWOT4DGnyOOw4fApM6uYuHYfmFbia', '0145000972', 'Abu Kassim', 'ACTIVE', 0);
+('admin@system', '$2a$12$9w/7iQFfqnT2P1Tc7sU9yeaKRPljD75XM.U25hTmQRqp6B5YHGxpq', '01000000', 'Admin', 'ACTIVE', 0),
+('fahmirazak0201@gmail.com', '$2a$12$Hb/G4rOnWl15Q1opGT3i8eszCWOT4DGnyOOw4fApM6uYuHYfmFbia', '0145000973', 'Fahmi Razak', 'ACTIVE', 0);
 
 CREATE TABLE tokens (
     token_id BIGINT AUTO_INCREMENT PRIMARY KEY,

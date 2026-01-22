@@ -43,4 +43,7 @@ public interface UserMapper {
             @Param("email") String email,
             @Param("status") String status
     );
+
+    @SelectProvider(type = UserProvider.class, method = "existsByEmail")
+    boolean existsByEmail(String email);
 }
