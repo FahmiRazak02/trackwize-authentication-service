@@ -57,7 +57,7 @@ public class UserProvider {
     public String updateRecordStatus(String email, String status) {
         return new SQL()
                 .UPDATE(DBConst.USER_TABLE)
-                .SET("record_status = #{status}")
+                .SET("status = #{status}")
                 .WHERE("email = #{email}")
                 .toString();
     }
