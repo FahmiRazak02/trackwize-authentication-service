@@ -87,7 +87,7 @@ public class NotificationService {
         reqDTO.setSubject("Trackwize Account");
 
         Map<String, Object> contents = new HashMap<>();
-        contents.put("Title", "Trackwize Account is Successfully Created, Welcome Onboard!");
+        contents.put("title", "Trackwize Account is Successfully Created, Welcome Onboard!");
         contents.put("message", "Your Trackwize Account is Created Successfully");
         contents.put("name", name);
 
@@ -110,7 +110,7 @@ public class NotificationService {
         reqDTO.setSubject("Trackwize Account");
 
         Map<String, Object> contents = new HashMap<>();
-        contents.put("Title", "Trackwize Account Verification");
+        contents.put("title", "Trackwize Account Verification");
         contents.put("message", "Please Verify Your Account");
         contents.put("name", name);
         contents.put("token", token);
@@ -135,7 +135,7 @@ public class NotificationService {
         reqDTO.setSubject("Trackwize Account is Activate");
 
         Map<String, Object> contents = new HashMap<>();
-        contents.put("Title", "Trackwize Account Activate");
+        contents.put("title", "Trackwize Account Activate");
         contents.put("message", "Your Are Ready to Roll!");
 
         reqDTO.setContents(contents);
