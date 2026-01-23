@@ -96,23 +96,13 @@ public class TokenService {
      */
     public void validateNoActiveSession(User user) {
         Token token = tokenMapper.findByUserId(user.getUserId());
-        if (token == null) {
-            log.error("{} due to no Token record found in database for: [user_id] [{}]", ErrorConst.NO_RECORD_FOUND_CODE, user.getUserId());
-            throw new TrackWizeException(
-                    ErrorConst.NO_RECORD_FOUND_CODE,
-                    ErrorConst.NO_RECORD_FOUND_MSG
-            );
-        }
-
-        boolean result = jwtUtil.validateToken(token.getAccessToken());
-        if (!result) {
+        if (token != null) {
             log.warn("{} due to user already has an active session: [user_id] [{}]", ErrorConst.USER_ALREADY_LOGGED_IN_CODE, user.getUserId());
             throw new TrackWizeException(
                     ErrorConst.USER_ALREADY_LOGGED_IN_CODE,
                     ErrorConst.USER_ALREADY_LOGGED_IN_MSG
             );
         }
-
     }
 
     /**
@@ -170,6 +160,8 @@ public class TokenService {
     public boolean validateRefreshToken(Long userId, String refreshToken) {
 //        1. Check if the userId from the token matches the provided userId
         Long tokenUserId = jwtUtil.getSubject(refreshToken);
+        log.info("tokenUserId: {}", tokenUserId);
+        log.info("userId: {}", userId);
         if (!tokenUserId.equals(userId)) {
             log.warn("UserId from token does not match the provided userId: [user_id] [{}]", userId);
             return false;

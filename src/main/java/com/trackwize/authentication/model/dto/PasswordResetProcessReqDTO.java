@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @PasswordValidator
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResetRequestDTO {
+public class PasswordResetProcessReqDTO {
 
     @NotBlank(message = "password is required")
     private String password;

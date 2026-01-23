@@ -2,22 +2,20 @@ package com.trackwize.authentication.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.trackwize.authentication.config.TokenSecurityConfig;
-import com.trackwize.common.constant.ErrorConst;
+import com.trackwize.authentication.model.dto.PasswordResetRequestReqDTO;
 import com.trackwize.common.constant.TokenConst;
 import com.trackwize.authentication.model.dto.AuthenticationReqDTO;
 import com.trackwize.authentication.model.dto.AuthenticationResDTO;
-import com.trackwize.authentication.model.dto.ResetRequestDTO;
+import com.trackwize.authentication.model.dto.PasswordResetProcessReqDTO;
 import com.trackwize.authentication.service.AuthenticationService;
 import com.trackwize.common.exception.TrackWizeException;
 import com.trackwize.common.util.CookieUtil;
-import com.trackwize.common.util.PasswordValidatorUtil;
 import com.trackwize.common.util.ResponseUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -135,22 +133,22 @@ public class AuthenticationController {
     }
 
     /**
-     * Request a password reset token for the specified email.
+     * Request a password reset by providing the user's email.
      *
-     * @param email The email address of the user requesting a password reset.
-     * @return A ResponseUtil containing the generated password reset token.
-     * @throws TrackWizeException      If there is an error during token generation.
+     * @param reqDTO The password reset request data transfer object containing the user's email.
+     * @return A ResponseUtil indicating that the password reset link has been sent.
+     * @throws TrackWizeException If there is an error during the password reset request.
      * @throws JsonProcessingException If there is an error processing JSON.
      */
-    @PostMapping("password-reset/request/{email}")
+    @PostMapping("password-reset/request")
     public ResponseUtil requestPasswordReset(
             @ModelAttribute("trackingId") String trackingId,
-            @PathVariable String email
+            @RequestBody @Valid PasswordResetRequestReqDTO reqDTO
     ) throws TrackWizeException, JsonProcessingException {
-        log.info("Request Payload [Email]: {}", email);
+        log.info("Request Payload [Email]: {}", reqDTO.getEmail());
         ResponseUtil responseUtil = ResponseUtil.success();
 
-        authenticationService.requestPasswordReset(email, trackingId);
+        authenticationService.requestPasswordReset(reqDTO.getEmail(), trackingId);
 
         responseUtil.setMsg("A password reset link has been sent.");
         return responseUtil;
@@ -166,7 +164,7 @@ public class AuthenticationController {
     @PostMapping("password-reset/process")
     public ResponseUtil processPasswordReset(
             @RequestParam("token") String token,
-            @RequestBody @Valid ResetRequestDTO reqDTO
+            @RequestBody @Valid PasswordResetProcessReqDTO reqDTO
     ) throws TrackWizeException {
         log.info("Request Payload [ResetRequestDTO]: {}", reqDTO);
         ResponseUtil responseUtil = ResponseUtil.success();

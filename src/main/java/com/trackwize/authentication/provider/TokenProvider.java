@@ -50,6 +50,8 @@ public class TokenProvider {
                 .FROM(DBConst.TOKEN_TABLE)
                 .WHERE("user_id = #{userId}")
                 .WHERE("status = " + DBConst.STATUS_ACTIVE_QUERY)
+                .ORDER_BY("updated_date DESC")
+                .LIMIT(1)
                 .toString();
     }
 
@@ -64,8 +66,9 @@ public class TokenProvider {
 
     public String deleteById(Long tokenId) {
         return new SQL()
-                .DELETE_FROM(DBConst.TOKEN_TABLE)
+                .UPDATE(DBConst.TOKEN_TABLE)
                 .WHERE("token_id = #{tokenId}")
+                .SET("status = " + DBConst.STATUS_INACTIVE_CREATE)
                 .toString();
     }
 }

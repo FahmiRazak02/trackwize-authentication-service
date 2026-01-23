@@ -6,6 +6,7 @@ import com.trackwize.common.constant.ErrorConst;
 import com.trackwize.authentication.mapper.UserMapper;
 import com.trackwize.authentication.model.entity.User;
 import com.trackwize.common.exception.TrackWizeException;
+import com.trackwize.common.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -99,7 +100,7 @@ public class AuthenticationService {
      * @param token The password reset token carried from password reset process
      * @throws TrackWizeException If there is an error during password update.
      */
-    public void updatePassword(ResetRequestDTO reqDTO, String token) throws TrackWizeException {
+    public void updatePassword(PasswordResetProcessReqDTO reqDTO, String token) throws TrackWizeException {
         String email = tokenService.getRedisValueByToken(token);
         if (StringUtils.isBlank(email)){
             log.warn("[{}] due to invalid or expired reset token: [token] [{}]", ErrorConst.TOKEN_EXPIRED_CODE, token);
@@ -117,7 +118,7 @@ public class AuthenticationService {
                     ErrorConst.NO_RECORD_FOUND_MSG
             );
         }
-        user.setPassword(reqDTO.getPassword());
+        user.setPassword(PasswordUtil.encryptPassword(reqDTO.getPassword()));
 
         int result = userMapper.updatePassword(user);
         if (result <= 0) {

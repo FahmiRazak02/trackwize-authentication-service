@@ -40,6 +40,6 @@ public interface TokenMapper {
     @ResultMap("tokenMap")
     Token validateToken(String refreshToken);
 
-    @DeleteProvider(type = TokenProvider.class, method = "deleteById")
+    @UpdateProvider(type = TokenProvider.class, method = "deleteById")
     void deleteById(Long tokenId);
 }
