@@ -87,8 +87,8 @@ public class NotificationService {
         reqDTO.setSubject("Trackwize Account");
 
         Map<String, Object> contents = new HashMap<>();
-        contents.put("title", "Trackwize Account is Successfully Created, Welcome Onboard!");
-        contents.put("message", "Your Trackwize Account is Created Successfully");
+        contents.put("title", "Trackwize Account");
+        contents.put("message", "Your Trackwize Account is Successfully Created, Welcome Onboard!");
         contents.put("name", name);
 
         reqDTO.setContents(contents);

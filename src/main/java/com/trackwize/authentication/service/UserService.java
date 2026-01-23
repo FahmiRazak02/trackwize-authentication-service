@@ -69,7 +69,7 @@ public class UserService {
     }
 
     public void activateUserAccount(String email) {
-        int result = userMapper.updateRecordStatus(email, DBConst.STATUS_PENDING_QUERY);
+        int result = userMapper.updateRecordStatus(email, DBConst.STATUS_ACTIVE_CREATE);
         if (result < 1) {
             log.error(
                     "[{}] due to failure when updating user record status for: [email] [{}]",
