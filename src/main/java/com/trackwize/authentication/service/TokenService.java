@@ -146,15 +146,9 @@ public class TokenService {
      * @throws TrackWizeException      If there is an error during token generation.
      */
     public String generatePasswordResetToken(String email) throws TrackWizeException {
-//        1. Generate JWT-based password reset token
-        String token = jwtUtil.generateToken(null, email, TokenConst.RESET_PASSWORD_TOKEN_EXPIRY);
-        if (token == null) {
-            log.error("[{}] due to failure when generating token for: [email] [{}]", ErrorConst.GENERATE_TOKEN_ERROR_CODE, email);
-            throw new TrackWizeException(
-                    ErrorConst.GENERATE_TOKEN_ERROR_CODE,
-                    ErrorConst.GENERATE_TOKEN_ERROR_MSG
-            );
-        }
+//        1. Generate Opaque password reset token
+        String token = OpaqueUtil.generate();
+
 //        2. Store token→email mapping in Redis with expiry
         redisTemplate.opsForValue().set(token, email, TokenConst.RESET_PASSWORD_TOKEN_EXPIRY, TimeUnit.MINUTES);
 
