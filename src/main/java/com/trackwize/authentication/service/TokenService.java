@@ -9,6 +9,7 @@ import com.trackwize.authentication.model.entity.Token;
 import com.trackwize.authentication.model.entity.User;
 import com.trackwize.common.exception.TrackWizeException;
 import com.trackwize.common.util.JWTUtil;
+import com.trackwize.common.util.OpaqueUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -200,15 +201,9 @@ public class TokenService {
     }
 
     public String generateEmailVerificationToken(String email) throws TrackWizeException {
-//        1. Generate JWT-based password reset token
-        String token = jwtUtil.generateToken(null, email, TokenConst.ACCOUNT_VERIFICATION_TOKEN_EXPIRY);
-        if (token == null) {
-            log.error("[{}] due to failure when generating token for: [email] [{}]", ErrorConst.GENERATE_TOKEN_ERROR_CODE, email);
-            throw new TrackWizeException(
-                    ErrorConst.GENERATE_TOKEN_ERROR_CODE,
-                    ErrorConst.GENERATE_TOKEN_ERROR_MSG
-            );
-        }
+//        1. Generate Opaque password reset token
+        String token = OpaqueUtil.generate();
+
 //        2. Store token→email mapping in Redis with expiry
         redisTemplate.opsForValue().set(token, email, TokenConst.ACCOUNT_VERIFICATION_TOKEN_EXPIRY, TimeUnit.MINUTES);
 
