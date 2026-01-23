@@ -24,7 +24,7 @@ public class RegistrationController {
     ) throws JsonProcessingException {
         ResponseUtil responseUtil = ResponseUtil.success();
 
-        registrationService.submitUserRegistration(reqDTO,trackingId);
+        registrationService.submitUserRegistration(reqDTO, trackingId);
 
         responseUtil.setMsg("User Account is Created, Please Check your email for verification link.");
         return responseUtil;

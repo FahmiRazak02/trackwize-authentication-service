@@ -13,6 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -46,6 +50,7 @@ public class RegistrationService {
         user.setUpdatedBy(DBConst.USER_ID_SYSTEM);
 
         userService.create(user);
+
         notificationService.sendAccountIsCreatedEmail(user.getEmail(), user.getName(), trackingId);
 
         handleAccountVerification(user, reqDTO, trackingId);
@@ -58,7 +63,7 @@ public class RegistrationService {
     ) throws JsonProcessingException {
         String token = tokenService.generateEmailVerificationToken(reqDTO.getEmail());
 
-        notificationService.sendAccountIsVerifiedEmail(user.getEmail(), user.getName(), trackingId, token);
+        notificationService.sendAccountIsVerifiedEmail(user.getEmail(), user.getName(), token, trackingId);
     }
 
     public void verifyAccount(String token, String trackingId) throws JsonProcessingException {
