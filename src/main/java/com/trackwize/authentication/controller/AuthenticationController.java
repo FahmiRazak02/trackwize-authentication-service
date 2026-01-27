@@ -1,8 +1,8 @@
 package com.trackwize.authentication.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.trackwize.authentication.config.TokenSecurityConfig;
 import com.trackwize.authentication.model.dto.PasswordResetRequestReqDTO;
+import com.trackwize.common.config.JwtSecurityConfig;
 import com.trackwize.common.constant.TokenConst;
 import com.trackwize.authentication.model.dto.AuthenticationReqDTO;
 import com.trackwize.authentication.model.dto.AuthenticationResDTO;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final TokenSecurityConfig tokenSecurityConfig;
 
     /**
      * Authenticate user and generate access and refresh tokens.
@@ -36,29 +35,31 @@ public class AuthenticationController {
      */
     @PostMapping("login")
     public ResponseUtil login(
-            @ModelAttribute("trackingId") String trackingId,
             @RequestBody @Valid AuthenticationReqDTO reqDTO,
             HttpServletResponse response
     ) throws TrackWizeException {
         ResponseUtil responseUtil = ResponseUtil.success();
 
         AuthenticationResDTO resDTO = authenticationService.authenticateAccess(reqDTO);
-        if (tokenSecurityConfig.isTokenCookieEnable()) {
+        if (JwtSecurityConfig.USE_COOKIE) {
             Cookie accessCookie = CookieUtil.createCookie(
                     resDTO.getAccessToken(),
-                    tokenSecurityConfig.isHttps(),
+                    JwtSecurityConfig.COOKIE_SECURE,
                     TokenConst.ACCESS_TOKEN_NAME,
                     TokenConst.ACCESS_TOKEN_EXPIRY
             );
             Cookie refreshCookie = CookieUtil.createCookie(
                     resDTO.getRefreshToken(),
-                    tokenSecurityConfig.isHttps(),
+                    JwtSecurityConfig.COOKIE_SECURE,
                     TokenConst.REFRESH_TOKEN_NAME,
                     TokenConst.REFRESH_TOKEN_EXPIRY
             );
             response.addCookie(accessCookie);
             response.addCookie(refreshCookie);
             CookieUtil.addSameSiteAttribute(response, "Lax");
+        } else {
+            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, resDTO.getAccessToken());
+            response.setHeader(TokenConst.REFRESH_TOKEN_NAME, resDTO.getRefreshToken());
         }
 
         responseUtil.setData(resDTO);
@@ -86,15 +87,17 @@ public class AuthenticationController {
         authenticationService.validateRefreshToken(userIdL, refreshToken);
 
         String token = authenticationService.generateNewAccessToken(userIdL);
-        if (tokenSecurityConfig.isTokenCookieEnable()) {
+        if (JwtSecurityConfig.USE_COOKIE) {
             Cookie accessCookie = CookieUtil.createCookie(
                     token,
-                    tokenSecurityConfig.isHttps(),
+                    JwtSecurityConfig.COOKIE_SECURE,
                     TokenConst.ACCESS_TOKEN_NAME,
                     TokenConst.ACCESS_TOKEN_EXPIRY
             );
             response.addCookie(accessCookie);
             CookieUtil.addSameSiteAttribute(response, "Lax");
+        } else {
+            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, token);
         }
 
         resUtil.setData(token);
@@ -115,17 +118,20 @@ public class AuthenticationController {
     ) throws TrackWizeException {
         ResponseUtil responseUtil = ResponseUtil.success();
 
-        if (tokenSecurityConfig.isTokenCookieEnable()) {
+        if (JwtSecurityConfig.USE_COOKIE) {
             Cookie accessCookie = CookieUtil.removeTokenFromCookie(
-                    tokenSecurityConfig.isHttps(),
+                    JwtSecurityConfig.COOKIE_SECURE,
                     TokenConst.ACCESS_TOKEN_NAME
             );
             Cookie refreshCookie = CookieUtil.removeTokenFromCookie(
-                    tokenSecurityConfig.isHttps(),
+                    JwtSecurityConfig.COOKIE_SECURE,
                     TokenConst.REFRESH_TOKEN_NAME
             );
             response.addCookie(accessCookie);
             response.addCookie(refreshCookie);
+        } else {
+            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, "");
+            response.setHeader(TokenConst.REFRESH_TOKEN_NAME, "");
         }
 
         authenticationService.logout(refreshToken);
