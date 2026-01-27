@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -58,7 +59,7 @@ public class AuthenticationController {
             response.addCookie(refreshCookie);
             CookieUtil.addSameSiteAttribute(response, "Lax");
         } else {
-            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, resDTO.getAccessToken());
+            response.setHeader(HttpHeaders.AUTHORIZATION, TokenConst.BEARER_PREFIX + resDTO.getAccessToken());
             response.setHeader(TokenConst.REFRESH_TOKEN_NAME, resDTO.getRefreshToken());
         }
 
@@ -97,7 +98,7 @@ public class AuthenticationController {
             response.addCookie(accessCookie);
             CookieUtil.addSameSiteAttribute(response, "Lax");
         } else {
-            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, token);
+            response.setHeader(HttpHeaders.AUTHORIZATION, TokenConst.BEARER_PREFIX + token);
         }
 
         resUtil.setData(token);
@@ -130,7 +131,7 @@ public class AuthenticationController {
             response.addCookie(accessCookie);
             response.addCookie(refreshCookie);
         } else {
-            response.setHeader(TokenConst.ACCESS_TOKEN_NAME, "");
+            response.setHeader(HttpHeaders.AUTHORIZATION, "");
             response.setHeader(TokenConst.REFRESH_TOKEN_NAME, "");
         }
 
