@@ -35,13 +35,9 @@ spring:
       email: ntf_email_queue
       inbox: ntf_inbox_queue
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.trackwize.userservice.model
-
 jwt:
   secret: xY75xfcUBuUt2fqB0pK/3194y319IJN==SIbASFi4as35SD=
-  defaultAccessTokenTimeout: 1800          #15minit
+  defaultAccessTokenTimeout: 1800          #15minitbut i
   defaultRefreshTokenTimeout: 2592000    #30 days
 
 smtp:
