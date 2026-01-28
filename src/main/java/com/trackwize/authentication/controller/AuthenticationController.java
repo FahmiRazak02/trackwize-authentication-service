@@ -70,20 +70,17 @@ public class AuthenticationController {
     /**
      * Refresh the access token using the provided refresh token.
      *
-     * @param userId       The ID of the user.
      * @param refreshToken The refresh token to be validated.
      * @return A ResponseUtil containing the new access token.
      * @throws TrackWizeException If the refresh token is missing or invalid.
      */
     @PostMapping("refresh")
     public ResponseUtil refreshToken (
-            @ModelAttribute("trackingId") String trackingId,
-            @ModelAttribute("userId") String userId,
             @CookieValue(name = TokenConst.REFRESH_TOKEN_NAME, required = true) String refreshToken,
             HttpServletResponse response
     ) throws TrackWizeException {
         ResponseUtil resUtil = ResponseUtil.success();
-        Long userIdL = Long.parseLong(userId);
+        Long userIdL = authenticationService.getUserIdFromRefreshToken(refreshToken);
 
         authenticationService.validateRefreshToken(userIdL, refreshToken);
 

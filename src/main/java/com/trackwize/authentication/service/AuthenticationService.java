@@ -154,4 +154,7 @@ public class AuthenticationService {
         tokenService.logout(refreshToken);
     }
 
+    public Long getUserIdFromRefreshToken(String refreshToken) {
+        return tokenService.getUserIdFromRefreshToken(refreshToken);
+    }
 }
