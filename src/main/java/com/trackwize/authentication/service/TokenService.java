@@ -1,5 +1,6 @@
 package com.trackwize.authentication.service;
 
+import com.trackwize.common.constant.DBConst;
 import com.trackwize.common.constant.ErrorConst;
 import com.trackwize.common.constant.TokenConst;
 import com.trackwize.authentication.mapper.TokenMapper;
@@ -78,6 +79,7 @@ public class TokenService {
         }
 
         token.setCreatedBy(tokenReqDTO.getUserId());
+        token.setUpdatedBy(tokenReqDTO.getUserId());
         result = tokenMapper.create(token);
         if (result <= 0) {
             log.error("{} due to failure when creating token record for: [tokenReqDTO] [{}]", ErrorConst.PERSIST_TOKEN_ERROR_CODE, tokenReqDTO);
@@ -96,8 +98,21 @@ public class TokenService {
      */
     public void validateNoActiveSession(User user) {
         Token token = tokenMapper.findByUserId(user.getUserId());
-        if (token != null) {
+        if (token == null) {
+            return;
+        }
+
+        if (DBConst.STATUS_ACTIVE_CREATE.equalsIgnoreCase(token.getStatus())){
             log.warn("{} due to user already has an active session: [user_id] [{}]", ErrorConst.USER_ALREADY_LOGGED_IN_CODE, user.getUserId());
+            throw new TrackWizeException(
+                    ErrorConst.USER_ALREADY_LOGGED_IN_CODE,
+                    ErrorConst.USER_ALREADY_LOGGED_IN_MSG
+            );
+        }
+
+        boolean result = jwtUtil.validateToken(token.getAccessToken());
+        if (!result) {
+            log.warn("{} due to invalid jwt: [user_id] [{}]", ErrorConst.USER_ALREADY_LOGGED_IN_CODE, user.getUserId());
             throw new TrackWizeException(
                     ErrorConst.USER_ALREADY_LOGGED_IN_CODE,
                     ErrorConst.USER_ALREADY_LOGGED_IN_MSG
@@ -195,5 +210,9 @@ public class TokenService {
 
 //        3. return token as response
         return token;
+    }
+
+    public Long getUserIdFromRefreshToken(String refreshToken) {
+        return jwtUtil.getSubject(refreshToken);
     }
 }
