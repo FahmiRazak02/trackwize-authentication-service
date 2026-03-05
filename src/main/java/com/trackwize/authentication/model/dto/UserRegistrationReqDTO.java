@@ -26,7 +26,7 @@ public class UserRegistrationReqDTO {
     @NotBlank(message = "confirm password is required")
     private String confirmPassword;
 
-    @NotBlank(message = "contact no is required")
+    @NotBlank(message = "contact number is required")
     @Pattern(regexp = CommonConst.CONTACT_NO_REGEX, message = "contact no must be valid")
     private String contactNumber;
 
