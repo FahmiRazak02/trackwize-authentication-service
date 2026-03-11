@@ -27,7 +27,6 @@ public class TokenProvider {
         return new SQL()
                 .INSERT_INTO(DBConst.TOKEN_TABLE)
                 .VALUES("user_id", "#{userId}")
-                .VALUES("access_token", "#{accessToken}")
                 .VALUES("refresh_token", "#{refreshToken}")
                 .VALUES("created_by", "#{createdBy}")
                 .VALUES("created_date", "NOW()")
@@ -37,7 +36,6 @@ public class TokenProvider {
     public String updateTokenRecord(Token token) {
         return new SQL()
                 .UPDATE(DBConst.TOKEN_TABLE)
-                .SET("access_token = #{accessToken}")
                 .SET("refresh_token = #{refreshToken}")
                 .SET("updated_by = #{updatedBy}")
                 .SET("updated_date = NOW()")

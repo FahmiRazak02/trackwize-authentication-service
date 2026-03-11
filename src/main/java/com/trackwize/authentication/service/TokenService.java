@@ -76,17 +76,17 @@ public class TokenService {
                         ErrorConst.PERSIST_TOKEN_ERROR_MSG
                 );
             }
-        }
-
-        token.setCreatedBy(tokenReqDTO.getUserId());
-        token.setUpdatedBy(tokenReqDTO.getUserId());
-        result = tokenMapper.create(token);
-        if (result <= 0) {
-            log.error("{} due to failure when creating token record for: [tokenReqDTO] [{}]", ErrorConst.PERSIST_TOKEN_ERROR_CODE, tokenReqDTO);
-            throw new TrackWizeException(
-                    ErrorConst.PERSIST_TOKEN_ERROR_CODE,
-                    ErrorConst.PERSIST_TOKEN_ERROR_MSG
-            );
+        } else {
+            token.setCreatedBy(tokenReqDTO.getUserId());
+            token.setUpdatedBy(tokenReqDTO.getUserId());
+            result = tokenMapper.create(token);
+            if (result <= 0) {
+                log.error("{} due to failure when creating token record for: [tokenReqDTO] [{}]", ErrorConst.PERSIST_TOKEN_ERROR_CODE, tokenReqDTO);
+                throw new TrackWizeException(
+                        ErrorConst.PERSIST_TOKEN_ERROR_CODE,
+                        ErrorConst.PERSIST_TOKEN_ERROR_MSG
+                );
+            }
         }
     }
 

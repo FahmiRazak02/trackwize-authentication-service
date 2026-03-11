@@ -44,22 +44,18 @@ public class AuthenticationService {
 //        2. Validate password (throws TrackWizeException if invalid)
         userService.validatePassword(reqDTO, user);
 
-//        3. Ensure no concurrent active session (throws TrackWizeException if already logged in)
-        tokenService.validateNoActiveSession(user);
-
-//        4. Generate JWT tokens
+//        3. Generate JWT tokens
         String accessToken = tokenService.generateUserAccessToken(user, defaultAccessTokenTimeout);
         String refreshToken = tokenService.generateUserAccessToken(user, defaultRefreshTokenTimeout);
 
         TokenReqDTO tokenReqDTO = new TokenReqDTO();
         tokenReqDTO.setUserId(user.getUserId());
-        tokenReqDTO.setAccessToken(accessToken);
         tokenReqDTO.setRefreshToken(refreshToken);
 
-//        5. Save token record to database
+//        4. Save token record to database
         tokenService.saveTokenRecord(tokenReqDTO);
 
-//        6. Return AuthenticationResDTO as response
+//        5. Return AuthenticationResDTO as response
         return new AuthenticationResDTO(accessToken, refreshToken);
     }
 
